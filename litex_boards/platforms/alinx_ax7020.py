@@ -17,22 +17,36 @@ _io = [
     ("user_led", 0, Pins("M14"),  IOStandard("LVCMOS33")),
     ("user_led", 1, Pins("M15"),  IOStandard("LVCMOS33")),
     ("user_led", 2, Pins("K16"),  IOStandard("LVCMOS33")),
-    ("user_led", 3, Pins("J18"),  IOStandard("LVCMOS33")),
+    ("user_led", 3, Pins("J16"),  IOStandard("LVCMOS33")),
 
     # Buttons
     ("user_btn", 0, Pins("N15"), IOStandard("LVCMOS33")),
     ("user_btn", 1, Pins("N16"), IOStandard("LVCMOS33")),
-    ("user_btn", 2, Pins("R17"), IOStandard("LVCMOS33")),
-    ("user_btn", 3, Pins("T17"), IOStandard("LVCMOS33")),
+    ("user_btn", 2, Pins("T17"), IOStandard("LVCMOS33")),
+    ("user_btn", 3, Pins("R17"), IOStandard("LVCMOS33")),
 
     # Serial
     ("serial", 0,
         Subsignal("tx", Pins("W19"), IOStandard("LVCMOS33")),
         Subsignal("rx", Pins("W18"), IOStandard("LVCMOS33")),
     ),
-]
 
-_ps7_io = [
+    # HDMI
+    ("hdmi", 0,
+        Subsignal("clk_p",   Pins("N18"), IOStandard("TMDS_33")),
+        Subsignal("clk_n",   Pins("P19"), IOStandard("TMDS_33")),
+        Subsignal("data0_p", Pins("V20"), IOStandard("TMDS_33")),
+        Subsignal("data0_n", Pins("W20"), IOStandard("TMDS_33")),
+        Subsignal("data1_p", Pins("T20"), IOStandard("TMDS_33")),
+        Subsignal("data1_n", Pins("U20"), IOStandard("TMDS_33")),
+        Subsignal("data2_p", Pins("N20"), IOStandard("TMDS_33")),
+        Subsignal("data2_n", Pins("P20"), IOStandard("TMDS_33")),
+        Subsignal("scl",     Pins("R18"), IOStandard("LVCMOS33")),
+        Subsignal("sda",     Pins("R16"), IOStandard("LVCMOS33")),
+        Subsignal("hpd_en",  Pins("Y19"), IOStandard("LVCMOS33")),
+        Subsignal("cec",     Pins("Y18"), IOStandard("LVCMOS33")),
+    ),
+
     # PS7
     ("ps7_clk",   0, Pins("E7")),
     ("ps7_porb",  0, Pins(1)),
@@ -59,6 +73,26 @@ _ps7_io = [
     ),
 ]
 
+# Connectors ---------------------------------------------------------------------------------------
+
+_connectors = [
+    ("j10",
+        "W19 W18 R14 P14 Y17 Y16 W15 V15",
+        "Y14 W14 P18 N17 U15 U14 P16 P15",
+        "U17 T16 V18 V17 T15 T14 V13 U13",
+        "W13 V12 U12 T12 T10 T11 A20 B19",
+        "B20 C20"
+    ),
+    ("j11",
+        "F17 F16 F20 F19 G20 G19 H18 J18",
+        "L20 L19 M20 M19 K18 K17 J19 K19",
+        "H20 J20 L17 L16 M18 M17 D20 D19",
+        "E19 E18 G18 G17 H17 H16 G15 H15",
+        "J14 K14"
+    ),
+]
+
+# PS7 config ---------------------------------------------------------------------------------------
 
 ps7_config_variants = {
     "common" : {
@@ -66,30 +100,15 @@ ps7_config_variants = {
         "PCW_FPGA0_PERIPHERAL_FREQMHZ"  : "100",
         "PCW_S_AXI_HP0_FREQMHZ"         : "100",
         "PCW_S_AXI_HP0_DATA_WIDTH"      : "32",
-        #"PCW_UART1_BAUD_RATE"           : "115200",
-        #"PCW_EN_UART1"                  : "1",
-        #"PCW_UART1_PERIPHERAL_ENABLE"   : "1",
-        #"PCW_UART1_UART1_IO"            : "MIO 48 .. 49",
+        "PCW_EN_UART1"                  : "1",
+        "PCW_UART1_PERIPHERAL_ENABLE"   : "1",
+        "PCW_UART1_UART1_IO"            : "MIO 48 .. 49",
         "PCW_PRESET_BANK1_VOLTAGE"      : "LVCMOS 1.8V",
-        #"PCW_USE_M_AXI_GP0"             : "1",
         "PCW_USE_S_AXI_HP0"             : "1",
         "PCW_USB0_PERIPHERAL_ENABLE"    : "1",
-        #"PCW_USB0_USB0_IO"              : "MIO 28 .. 39",
-        #"PCW_USB0_RESET_ENABLE"         : "1",
-        #"PCW_USB0_RESET_IO"             : "MIO 46",
-        #"PCW_EN_USB0"                   : "1",
         "PCW_UIPARAM_DDR_PARTNO"        : "MT41K256M16 RE-125",
     },
 }
-
-# Connectors ---------------------------------------------------------------------------------------
-
-_connectors = [
-    ("pmodb",    "B12 B12 C12"),
-    ("pmodhdmi", "N18 P19 V20 W20 T20 U20 N20 P20 R18 R16 Y18 Y19 V16"),
-    ("pmodj10",  "W19 W18 R14 P14 Y17 Y16 W15 V15 Y14 W14 P18 N17 U15 U14 P16 P15 U17 T16 V18 V17 T15 T14 V13 U13 W13 V12 U12 T12 T10 T11 A20 B19 B20 C20"),
-    ("pmodj11",  "F17 F16 F20 F19 G20 G19 H18 J18 L20 L19 M20 M19 K18 K17 J19 K19 H20 J20 L17 L16 M18 M17 D20 D19 E19 E18 G18 G17 H17 H16 G15 H15 J14 K14"),
-]
 
 # Platform -----------------------------------------------------------------------------------------
 
@@ -101,7 +120,6 @@ class Platform(Xilinx7SeriesPlatform):
     def __init__(self):
         self.ps7_config = ps7_config_variants["common"]
         Xilinx7SeriesPlatform.__init__(self, "xc7z020clg400-2", _io, _connectors, toolchain="vivado")
-        self.add_extension(_ps7_io)
 
     def create_programmer(self):
         return VivadoProgrammer()
